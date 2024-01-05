@@ -104,7 +104,6 @@ upgrade-bundles: offline-bundle online-bundle
 .PHONY: tag
 tag:	
 	@echo "FINAL_RELEASE = $(FINAL_RELEASE)"
-	TAG=true ./version -t || true
 	@if [ "$(FINAL_RELEASE)" = "true" ]; then \
         ./version -f -t; \
     else \
