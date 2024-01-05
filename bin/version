@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Constants
+PROGNAME=$(basename "$0")
+PROGDIR=$(dirname "$(readlink -f "$0")")
+
+# Specify the path to the file to save/load BASE_VERSION
+VERSION_FILE="/root/version.txt"
+
+# Usage function
+usage() {
+    echo "Usage: $PROGNAME [BASE_VERSION] [OPTIONS]"
+    echo "Options:"
+    echo "  -h, --help        Show this message and exit"
+    echo "  -t, --tag         Tags the git repo if the version has been incremented; does not push."
+    echo "  -f, --final       Cut a final release build by stripping the suffix."
+}
+
+# Parse arguments
+BASE_VERSION="${BASE_VERSION:-default_value}"
+TAG=false
+FINAL_RELEASE=false
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -t|--tag)
+            TAG=true
+            shift
+            ;;
+        -f|--final)
+            FINAL_RELEASE=true
+            shift
+            ;;
+        *)
+            if [[ $# -eq 1 ]]; then
+                BASE_VERSION="$1"
+            else
+                echo "Error: Invalid argument."
+                usage
+                exit 1
+            fi
+            shift
+            break
+            ;;
+    esac
+done
+
+# Load the last BASE_VERSION from the specified file if it exists
+if [[ -f "$VERSION_FILE" ]]; then
+    BASE_VERSION=$(cat "$VERSION_FILE")
+fi
+
+# Main script logic
+if [[ -z "$BASE_VERSION" ]]; then
+    echo "Error: BASE_VERSION is not provided."
+    usage
+    exit 1
+fi
+
+if [[ "$FINAL_RELEASE" == false ]]; then
+    if [[ "$BASE_VERSION" == *-* ]]; then
+        # Extract the numerical part and increment it
+        NUM_SUFFIX="${BASE_VERSION##*-}"
+        if [[ "$NUM_SUFFIX" =~ ^[0-9]+$ ]]; then
+            NUM_SUFFIX=$((NUM_SUFFIX + 1))
+            BASE_VERSION="${BASE_VERSION%-*}-$NUM_SUFFIX"
+        else
+            BASE_VERSION="${BASE_VERSION%-*}-0"
+        fi
+    else
+        BASE_VERSION="${BASE_VERSION}-0"
+    fi
+fi
+
+# Save the updated BASE_VERSION to the specified file for the next run
+echo "$BASE_VERSION" > "$VERSION_FILE"
+
+if [[ "$FINAL_RELEASE" == true ]]; then
+    # Remove the suffix when FINAL_RELEASE is true
+    BASE_VERSION="${BASE_VERSION%%-*}"
+fi
+
+echo "$BASE_VERSION"
+
