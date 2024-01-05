@@ -64,17 +64,17 @@ if [[ -z "$BASE_VERSION" ]]; then
 fi
 
 if [[ "$FINAL_RELEASE" == false ]]; then
-    if [[ "$BASE_VERSION" == *-* ]]; then
-        # Extract the numerical part and increment it
-        NUM_SUFFIX="${BASE_VERSION##*-}"
-        if [[ "$NUM_SUFFIX" =~ ^[0-9]+$ ]]; then
-            NUM_SUFFIX=$((NUM_SUFFIX + 1))
-            BASE_VERSION="${BASE_VERSION%-*}-$NUM_SUFFIX"
-        else
-            BASE_VERSION="${BASE_VERSION%-*}-0"
-        fi
-    else
+    if [[ "$BASE_VERSION" != *-* ]]; then
         BASE_VERSION="${BASE_VERSION}-0"
+    fi
+
+    # Extract the numerical part and increment it
+    NUM_SUFFIX="${BASE_VERSION##*-}"
+    if [[ "$NUM_SUFFIX" =~ ^[0-9]+$ ]]; then
+        NUM_SUFFIX=$((NUM_SUFFIX + 1))
+        BASE_VERSION="${BASE_VERSION%-*}-$NUM_SUFFIX"
+    else
+        BASE_VERSION="${BASE_VERSION%-*}-0"
     fi
 fi
 
