@@ -5,7 +5,9 @@ BUNDLE_DIR := $(BUILD_DIR)/opt-layer2
 $(shell mkdir -p $(BUILD_DIR))
 
 # Read the version from VERSION
-VERSION := $(shell cat VERSION)
+#VERSION := $(shell cat VERSION)
+VERSION := $(or $(VERSION),$(shell cat VERSION))
+FINAL_RELEASE ?= false
 #VERSION := $(or $(VERSION),$(shell cat VERSION))
 #INITIAL_OVA_BUILD=$(INITIAL_OVA_BUILD)
 #VERSION_UPGRADE=$(VERSION_UPGRADE)
