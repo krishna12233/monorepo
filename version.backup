@@ -19,7 +19,7 @@ usage() {
 }
 
 # Parse arguments
-#BASE_VERSION="${BASE_VERSION:-default_value}"
+BASE_VERSION="${BASE_VERSION:-default_value}"
 TAG=false
 FINAL_RELEASE=false
 
@@ -52,12 +52,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Load the last BASE_VERSION from the specified file if it exists
-#if [[ -f "$VERSION_FILE" ]]; then
-#    BASE_VERSION=$(cat "$VERSION_FILE")
-#fi
-
-if [[ "$BASE_VERSION" == "default_value" ]] && [[ -f "$VERSION_FILE" ]]; then
-    BASE_VERSION="${VERSION:-$(cat VERSION_FILE)}"
+if [[ -f "$VERSION_FILE" ]]; then
+    BASE_VERSION=$(cat "$VERSION_FILE")
 fi
 
 # Main script logic
