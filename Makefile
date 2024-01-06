@@ -4,8 +4,8 @@ BUILD_DIR := $(MAKEFILE_DIR)/build
 BUNDLE_DIR := $(BUILD_DIR)/opt-layer2
 $(shell mkdir -p $(BUILD_DIR))
 
-# Read the version from version.txt
-VERSION := $(shell cat version.txt)
+# Read the version from VERSION
+VERSION := $(shell cat VERSION)
 
 ONLINE_BUNDLE_NAME := opt-layer2-$(VERSION).x86_64.tar.gz
 OFFLINE_BUNDLE_NAME := opt-layer2-$(VERSION)-offline.x86_64.tar.gz
@@ -34,8 +34,8 @@ increment-version:
 
 .PHONY: tag
 tag: increment-version
-	git tag -a $(shell cat version.txt) -m "Version $(shell cat version.txt)"
-	git push origin $(shell cat version.txt)
+	git tag -a $(shell cat VERSION) -m "Version $(shell cat VERSION)"
+	git push origin $(shell cat VERSION)
 
 # [Include the rest of your targets here]
 
@@ -45,8 +45,8 @@ tag-push: tag update-version-file
 
 .PHONY: update-version-file
 update-version-file:
-	@git diff --quiet version.txt || (echo "version.txt has changed. Committing and pushing the changes." && \
-        git commit -m "Update version to $(shell cat version.txt)" version.txt && \
+	@git diff --quiet VERSION || (echo "VERSION has changed. Committing and pushing the changes." && \
+        git commit -m "Update version to $(shell cat VERSION)" VERSION && \
         git push)
 
 

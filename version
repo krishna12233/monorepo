@@ -7,7 +7,7 @@ PROGNAME=$(basename "$0")
 PROGDIR=$(dirname "$(readlink -f "$0")")
 
 # Specify the path to the file to save/load BASE_VERSION
-VERSION_FILE="./version.txt"
+VERSION_FILE="./VERSION"
 
 # Usage function
 usage() {
