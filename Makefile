@@ -40,10 +40,19 @@ tag: increment-version
 # [Include the rest of your targets here]
 
 .PHONY: tag-push
-tag-push: tag
+tag-push: tag update-version-file
 	git push --tags
 
-# [Rest of your targets]
+.PHONY: update-version-file
+update-version-file:
+	@if git diff --exit-code version.txt; then \
+        echo "version.txt has changed. Committing and pushing the changes."; \
+        git commit -m "Update version to $(shell cat version.txt)" version.txt; \
+        git push; \
+    else \
+        echo "No changes in version.txt. Nothing to commit."; \
+    fi
+
 
 .PHONY: clean
 clean:
