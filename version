@@ -82,12 +82,14 @@ fi
     # Extract the numerical part and increment it
 
 # Save the updated BASE_VERSION to the specified file for the next run
-echo "$BASE_VERSION" > "$VERSION_FILE"
+#echo "$BASE_VERSION" > "$VERSION_FILE"
 
 if [[ "$FINAL_RELEASE" == true ]]; then
     # Remove the suffix when FINAL_RELEASE is true
     BASE_VERSION="${BASE_VERSION%%-*}"
 fi
+
+echo "$BASE_VERSION" > "$VERSION_FILE"
 
 echo "$BASE_VERSION"
 

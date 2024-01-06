@@ -34,14 +34,14 @@ increment-version:
 
 .PHONY: tag
 tag: increment-version
-        git tag -a $(shell cat version.txt) -m "Version $(shell cat version.txt)"
-        git push origin $(shell cat version.txt)
+	git tag -a $(shell cat version.txt) -m "Version $(shell cat version.txt)"
+	git push origin $(shell cat version.txt)
 
 # [Include the rest of your targets here]
 
 .PHONY: tag-push
 tag-push: tag
-        git push --tags
+	git push --tags
 
 # [Rest of your targets]
 
