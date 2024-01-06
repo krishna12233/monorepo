@@ -1,4 +1,4 @@
-MAKEFILE_PATH := $(realpath $(lastword $(MAKE`FILE_LIST)))
+MAKEFILE_PATH := $(realpath $(lastword $(MAKEFILE_LIST)))
 MAKEFILE_DIR := $(shell dirname $(MAKEFILE_PATH))
 BUILD_DIR := $(MAKEFILE_DIR)/build
 BUNDLE_DIR := $(BUILD_DIR)/opt-layer2

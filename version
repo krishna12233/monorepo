@@ -5,7 +5,7 @@ set -e
 # Constants
 PROGNAME=$(basename "$0")
 PROGDIR=$(dirname "$(readlink -f "$0")")
-
+#PROGDIR=$(dirname "$(readlink -f "${0:-$PWD}")")
 # Specify the path to the file to save/load BASE_VERSION
 VERSION_FILE="./VERSION"
 
