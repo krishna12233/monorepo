@@ -5,8 +5,8 @@ BUNDLE_DIR := $(BUILD_DIR)/opt-layer2
 $(shell mkdir -p $(BUILD_DIR))
 
 # Read the version from VERSION
-#VERSION := $(shell cat VERSION)
-VERSION := $(or $(VERSION),$(shell cat VERSION))
+VERSION := $(shell cat VERSION)
+#VERSION := $(or $(VERSION),$(shell cat VERSION))
 #INITIAL_OVA_BUILD=$(INITIAL_OVA_BUILD)
 #VERSION_UPGRADE=$(VERSION_UPGRADE)
 BASE_UPGRADE_VERSION ?= 4.0.0
@@ -60,22 +60,22 @@ ${OVA_PATH}: l2-install
 	bin/export_vm $(shell cat build/vm_vm_name.txt) ${OVA_PATH}
 
 ${OFFLINE_BUNDLE}: buildinfo
-        export L2_TEMPLATE_VERSION=${BASE_UPGRADE_VERSION}; \
+	export L2_TEMPLATE_VERSION=${BASE_UPGRADE_VERSION}; \
 	cp -R opt-layer2 ${BUNDLE_DIR}; \
-        ansible-playbook -i ${UPGRADE_INVENTORY} -e L2_VERSION=${VERSION} -e BUNDLE_FILENAME=${OFFLINE_BUNDLE_NAME} -e BUNDLE_DIR=${BUNDLE_DIR} -e PKG_DIR=${BUNDLE_DIR}/pkg vm_builder/write-bundle-metadata.yml vm_builder/populate-offline-bundle.yml
-        cd ${BUNDLE_DIR}; \
-        tar -czf ${OFFLINE_BUNDLE} ./*
-        export L2_TEMPLATE_VERSION=${BASE_UPGRADE_VERSION}; \
+	ansible-playbook -i ${UPGRADE_INVENTORY} -e L2_VERSION=${VERSION} -e BUNDLE_FILENAME=${OFFLINE_BUNDLE_NAME} -e BUNDLE_DIR=${BUNDLE_DIR} -e PKG_DIR=${BUNDLE_DIR}/pkg vm_builder/write-bundle-metadata.yml vm_builder/populate-offline-bundle.yml
+	cd ${BUNDLE_DIR}; \
+	tar -czf ${OFFLINE_BUNDLE} ./*
+	export L2_TEMPLATE_VERSION=${BASE_UPGRADE_VERSION}; \
 	ansible-playbook -i ${UPGRADE_INVENTORY} vm_builder/teardown.yml
-        rm -f build/*.txt
-        rm -rf ${BUNDLE_DIR}
+	rm -f build/*.txt
+	rm -rf ${BUNDLE_DIR}
 
 ${ONLINE_BUNDLE}: buildinfo
-        ./download_bundle.sh
-        cp -R opt-layer2 ${BUNDLE_DIR}; \
-        ansible-playbook -e L2_VERSION=${VERSION} -e BUNDLE_FILENAME=${ONLINE_BUNDLE_NAME} -e BUNDLE_DIR=${BUNDLE_DIR} vm_builder/write-bundle-metadata.yml
-        cd ${BUNDLE_DIR}; \
-        tar -czf ${ONLINE_BUNDLE} ./*
+	./download_bundle.sh
+	cp -R opt-layer2 ${BUNDLE_DIR}; \
+	ansible-playbook -e L2_VERSION=${VERSION} -e BUNDLE_FILENAME=${ONLINE_BUNDLE_NAME} -e BUNDLE_DIR=${BUNDLE_DIR} vm_builder/write-bundle-metadata.yml
+	cd ${BUNDLE_DIR}; \
+	tar -czf ${ONLINE_BUNDLE} ./*
 	rm -rf ${BUNDLE_DIR}
 
 .PHONY: ova
