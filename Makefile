@@ -119,8 +119,12 @@ increment-version:
 
 .PHONY: tag
 tag: increment-version
-	git tag -a $(shell cat VERSION) -m "Version $(shell cat VERSION)"
-	git push origin $(shell cat VERSION)
+	@if git rev-parse $(shell cat VERSION) >/dev/null 2>&1; then \
+            echo "Tag $(shell cat VERSION) already exists. Skipping tag creation."; \
+        else \
+            git tag -a $(shell cat VERSION) -m "Version $(shell cat VERSION)" && \
+            git push origin $(shell cat VERSION); \
+        fi
 
 # [Include the rest of your targets here]
 
